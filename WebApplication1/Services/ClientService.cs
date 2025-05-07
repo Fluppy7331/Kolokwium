@@ -26,6 +26,7 @@ public class ClientService : IClientService
         await using SqlConnection conn = new SqlConnection(_connectionString);
         await using SqlCommand cmd = new SqlCommand(command, conn);
         await conn.OpenAsync();
+        
         cmd.Parameters.AddWithValue("@visitId", visitId);
         ClientVisitsInfoDto? clientVisit  = null;
         var reader = await cmd.ExecuteReaderAsync();
@@ -52,7 +53,7 @@ public class ClientService : IClientService
                 };
             }
             int serviceId = reader.GetInt32(6);
-            var service = clientVisit.services.FirstOrDefault(e => e.id.Equals(serviceId));
+            var service = clientVisit.services.FirstOrDefault(e => e.id==serviceId);
             if (service is null)
             {
                 service = new VisitServicesInfoDto()
